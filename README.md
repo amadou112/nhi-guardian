@@ -1,5 +1,7 @@
 # NHI Guardian — Powered by Sidibe Enterprises
 
+**Live demo:** [frontend-sandy-nine-57.vercel.app](https://frontend-sandy-nine-57.vercel.app) · **Source:** [github.com/amadou112/nhi-guardian](https://github.com/amadou112/nhi-guardian)
+
 > NHI Guardian is an AI-powered Non-Human Identity Security Platform, powered by Sidibe Enterprises, that helps security and IAM teams identify risky service accounts, API keys, tokens, secrets, and machine credentials. It provides identity inventory, risk scoring, remediation guidance, and executive reporting.
 
 Non-human identities — API keys, service accounts, OAuth tokens, SSH keys, CI/CD secrets, and machine certificates — now outnumber human identities in most enterprises, and they rarely get the same governance. NHI Guardian is a portfolio-grade demonstration of how a security or IAM program would inventory, score, and remediate that risk end to end.
