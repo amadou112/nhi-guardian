@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+/*
+  NHI Guardian design tokens.
+  This is a security operations console — SOC displays are conventionally
+  dark for 24/7 monitoring legibility, so committing to a single dark
+  theme is a deliberate choice, not an oversight.
+
+  Neutral scale ("ink") carries a faint violet bias toward the brand
+  accent rather than a flat grey. Brand accent is an electric indigo
+  drawn from the hero shield artwork; a magenta glow is its decorative
+  companion. Severity colors are a separate, standard traffic-light set
+  so risk state never gets confused with brand/interactive color.
+*/
+
+:root {
+  --background: #08070c;
+  --foreground: #f1eefa;
+
+  /* ink: neutral scale, violet-biased */
+  --color-ink-50: #f5f3fa;
+  --color-ink-100: #e4e1ee;
+  --color-ink-200: #c7c3d6;
+  --color-ink-300: #9691ac;
+  --color-ink-400: #6f6a87;
+  --color-ink-500: #4a4460;
+  --color-ink-600: #363048;
+  --color-ink-700: #262233;
+  --color-ink-800: #1b1826;
+  --color-ink-900: #121019;
+  --color-ink-950: #08070c;
+
+  /* accent: electric indigo, the brand/interactive color */
+  --color-accent-50: #f1f3ff;
+  --color-accent-100: #e2e6ff;
+  --color-accent-200: #c7cfff;
+  --color-accent-300: #a3afff;
+  --color-accent-400: #7c8cff;
+  --color-accent-500: #5b6ef5;
+  --color-accent-600: #4657d6;
+  --color-accent-700: #3742ab;
+  --color-accent-800: #262e7d;
+  --color-accent-900: #1e2461;
+  --color-accent-950: #171b47;
+
+  /* glow: magenta companion to the accent, decorative use only */
+  --color-glow-400: #e07dee;
+  --color-glow-500: #c74fe0;
+  --color-glow-600: #a338bf;
+
+  /* gold: reserved for the Sidibe Enterprises wordmark treatment only */
+  --color-gold-400: #e6bd74;
+  --color-gold-500: #d8a448;
+  --color-gold-600: #b38538;
+
+  /* severity: standard, separate from brand accent */
+  --color-critical-400: #f97e8c;
+  --color-critical-500: #f1495c;
+  --color-critical-950: #3a121c;
+  --color-high-400: #f7bd6b;
+  --color-high-500: #f2a93b;
+  --color-high-950: #3a2810;
+  --color-medium-400: #5fd6ca;
+  --color-medium-500: #22c3b6;
+  --color-medium-950: #0e3330;
+  --color-low-400: #7ce8a4;
+  --color-low-500: #4ade80;
+  --color-low-950: #12331e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-ink-50: var(--color-ink-50);
+  --color-ink-100: var(--color-ink-100);
+  --color-ink-200: var(--color-ink-200);
+  --color-ink-300: var(--color-ink-300);
+  --color-ink-400: var(--color-ink-400);
+  --color-ink-500: var(--color-ink-500);
+  --color-ink-600: var(--color-ink-600);
+  --color-ink-700: var(--color-ink-700);
+  --color-ink-800: var(--color-ink-800);
+  --color-ink-900: var(--color-ink-900);
+  --color-ink-950: var(--color-ink-950);
+
+  --color-accent-50: var(--color-accent-50);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-accent-700: var(--color-accent-700);
+  --color-accent-800: var(--color-accent-800);
+  --color-accent-900: var(--color-accent-900);
+  --color-accent-950: var(--color-accent-950);
+
+  --color-glow-400: var(--color-glow-400);
+  --color-glow-500: var(--color-glow-500);
+  --color-glow-600: var(--color-glow-600);
+
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+
+  --color-critical-400: var(--color-critical-400);
+  --color-critical-500: var(--color-critical-500);
+  --color-critical-950: var(--color-critical-950);
+  --color-high-400: var(--color-high-400);
+  --color-high-500: var(--color-high-500);
+  --color-high-950: var(--color-high-950);
+  --color-medium-400: var(--color-medium-400);
+  --color-medium-500: var(--color-medium-500);
+  --color-medium-950: var(--color-medium-950);
+  --color-low-400: var(--color-low-400);
+  --color-low-500: var(--color-low-500);
+  --color-low-950: var(--color-low-950);
+
+  --font-display: var(--font-plex-sans);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-feature-settings: "tnum" 1;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display), var(--font-sans), Arial, sans-serif;
+  text-wrap: balance;
+}
+
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Texture: hairline circuit grid, barely-there, evokes the hardware/
+   machine-identity subject without competing with content. Applied as
+   an absolutely-positioned pseudo-layer so its opacity never touches
+   real content sitting on top of it. */
+.texture-grid {
+  position: relative;
+  isolation: isolate;
+}
+.texture-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("/textures/circuit-grid.svg");
+  background-size: 260px 260px;
+}
+.texture-grid > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Texture: fine film grain for material depth on large dark surfaces. */
+.texture-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Elevation shadows: layered, cool, and restrained. */
+.shadow-panel {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 12px 32px -12px rgba(0, 0, 0, 0.55);
+}
+
+.shadow-panel-hover {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 20px 44px -14px rgba(0, 0, 0, 0.65);
+}
+
+/* Accent glow: used sparingly on primary actions and focus states. */
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(91, 110, 245, 0.4), 0 8px 24px -6px rgba(91, 110, 245, 0.45);
+}
+
+.glow-accent-lg {
+  box-shadow: 0 0 60px -12px rgba(91, 110, 245, 0.55), 0 0 120px -30px rgba(199, 79, 224, 0.35);
+}
+
+::selection {
+  background: var(--color-accent-700);
+  color: var(--color-ink-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-700);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
