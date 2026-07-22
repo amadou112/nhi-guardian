@@ -1,23 +1,17 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bot, Send, Sparkles, User } from "lucide-react";
-import { askAiAnalyst, SUGGESTED_QUESTIONS } from "@/lib/aiService";
+import { askAiAnalyst } from "@/lib/aiService";
 import { identities } from "@/data/identities";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 interface Message {
   role: "user" | "assistant";
   text: string;
 }
-
-const INTRO: Message = {
-  role: "assistant",
-  text:
-    "Hi, I'm the NHI Guardian AI Security Analyst (running in local mock mode). Ask me about your " +
-    "highest-risk identities, request an executive summary, or ask for a remediation plan.",
-};
 
 function renderText(text: string) {
   return text.split("\n").map((line, i) => {
@@ -39,10 +33,15 @@ function renderText(text: string) {
 }
 
 export function ChatWindow() {
-  const [messages, setMessages] = useState<Message[]>([INTRO]);
+  const { dict } = useLanguage();
+  const [messages, setMessages] = useState<Message[]>([{ role: "assistant", text: dict.aiAssistant.intro }]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMessages([{ role: "assistant", text: dict.aiAssistant.intro }]);
+  }, [dict]);
 
   function ask(question: string) {
     if (!question.trim()) return;
@@ -93,7 +92,7 @@ export function ChatWindow() {
         {thinking && (
           <div className="flex items-center gap-2 pl-11 text-xs text-ink-500">
             <Sparkles className="h-3.5 w-3.5 animate-pulse text-accent-400" />
-            Analyzing identity inventory…
+            {dict.aiAssistant.analyzing}
           </div>
         )}
         <div ref={endRef} />
@@ -101,11 +100,11 @@ export function ChatWindow() {
 
       <div className="border-t border-ink-800 p-4">
         <div className="mb-3 flex flex-wrap gap-2">
-          {SUGGESTED_QUESTIONS.map((q) => (
+          {dict.aiAssistant.suggested.map((q) => (
             <button
               key={q}
               onClick={() => ask(q)}
-              className="rounded-full border border-ink-800 bg-ink-900 px-3 py-1.5 text-xs text-ink-400 hover:border-accent-800 hover:text-accent-300"
+              className="rounded-full border border-ink-800 bg-ink-900 px-3 py-1.5 text-xs text-ink-400 hover:border-accent-800 hover:text-accent-ink"
             >
               {q}
             </button>
@@ -115,7 +114,7 @@ export function ChatWindow() {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask the AI Security Analyst about your non-human identities…"
+            placeholder={dict.aiAssistant.placeholder}
             className="flex-1 rounded-lg border border-ink-800 bg-ink-950 px-4 py-2.5 text-sm text-ink-200 placeholder:text-ink-600 focus:outline-none focus:ring-1 focus:ring-accent-700"
           />
           <Button type="submit" disabled={!input.trim()}>

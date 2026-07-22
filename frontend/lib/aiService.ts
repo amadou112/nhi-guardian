@@ -128,12 +128,3 @@ export function askAiAnalyst(question: string, identities: NonHumanIdentity[]): 
   }
   return { text: answerDefault(identities) };
 }
-
-export const SUGGESTED_QUESTIONS = [
-  "Which identities are highest risk?",
-  "Explain why aws-root-automation-key is critical.",
-  "Generate a remediation plan.",
-  "Write an executive risk summary.",
-  "What should we fix first?",
-  "Which identities are stale or orphaned?",
-];

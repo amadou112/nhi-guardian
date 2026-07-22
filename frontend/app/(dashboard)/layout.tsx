@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MobileNav } from "@/components/layout/MobileNav";
 
 export default function DashboardGroupLayout({
   children,
@@ -8,7 +9,8 @@ export default function DashboardGroupLayout({
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar />
-      <div className="flex-1 min-w-0 flex flex-col">{children}</div>
+      <div className="texture-grid-ambient flex-1 min-w-0 flex flex-col pb-16 md:pb-0">{children}</div>
+      <MobileNav />
     </div>
   );
 }

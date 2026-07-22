@@ -1,5 +1,8 @@
+"use client";
+
 import { Badge } from "@/components/ui/Badge";
 import { RiskSeverity } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { AlertTriangle, ShieldAlert, ShieldCheck, ShieldQuestion } from "lucide-react";
 
 const config: Record<RiskSeverity, { tone: "critical" | "high" | "medium" | "low"; icon: React.ReactNode }> = {
@@ -10,11 +13,12 @@ const config: Record<RiskSeverity, { tone: "critical" | "high" | "medium" | "low
 };
 
 export function RiskBadge({ severity }: { severity: RiskSeverity }) {
+  const { dict } = useLanguage();
   const { tone, icon } = config[severity];
   return (
     <Badge tone={tone}>
       {icon}
-      {severity}
+      {dict.severity[severity]}
     </Badge>
   );
 }

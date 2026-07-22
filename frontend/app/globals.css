@@ -16,6 +16,9 @@
 :root {
   --background: #08070c;
   --foreground: #f1eefa;
+  --font-display: var(--font-plex-sans);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-plex-mono);
 
   /* ink: neutral scale, violet-biased */
   --color-ink-50: #f5f3fa;
@@ -66,11 +69,56 @@
   --color-low-400: #7ce8a4;
   --color-low-500: #4ade80;
   --color-low-950: #12331e;
+
+  /* "-ink" variants: for plain standalone text/icons directly on the
+     page background (no chip behind them). These are the only tokens
+     that actually swap value between themes — chip/badge backgrounds
+     (the numbered scale above) stay constant in both themes on
+     purpose, since a colored status pill reads fine regardless of
+     page theme, while bare text needs real contrast against whatever
+     is now behind it. */
+  --color-accent-ink: #a3afff;
+  --color-critical-ink: #f97e8c;
+  --color-high-ink: #f7bd6b;
+  --color-medium-ink: #5fd6ca;
+  --color-low-ink: #7ce8a4;
+}
+
+/* Light theme — mirrors the ink neutral scale (950⇄50) so every
+   bg/border/text class built on it inverts automatically, swaps
+   background/foreground, and darkens the handful of tokens that are
+   used as plain readable text/icons rather than chip fills. */
+:root[data-theme="light"] {
+  --background: #f5f3fa;
+  --foreground: #08070c;
+
+  --color-ink-50: #08070c;
+  --color-ink-100: #121019;
+  --color-ink-200: #1b1826;
+  --color-ink-300: #262233;
+  --color-ink-400: #363048;
+  --color-ink-500: #4a4460;
+  --color-ink-600: #6f6a87;
+  --color-ink-700: #9691ac;
+  --color-ink-800: #c7c3d6;
+  --color-ink-900: #e4e1ee;
+  --color-ink-950: #f5f3fa;
+
+  --color-gold-500: #8a641c;
+
+  --color-accent-ink: #3742ab;
+  --color-critical-ink: #c02f42;
+  --color-high-ink: #9c6207;
+  --color-medium-ink: #0f8a7e;
+  --color-low-ink: #1f9d52;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 
   --color-ink-50: var(--color-ink-50);
   --color-ink-100: var(--color-ink-100);
@@ -117,9 +165,11 @@
   --color-low-500: var(--color-low-500);
   --color-low-950: var(--color-low-950);
 
-  --font-display: var(--font-plex-sans);
-  --font-sans: var(--font-public-sans);
-  --font-mono: var(--font-plex-mono);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-critical-ink: var(--color-critical-ink);
+  --color-high-ink: var(--color-high-ink);
+  --color-medium-ink: var(--color-medium-ink);
+  --color-low-ink: var(--color-low-ink);
 }
 
 body {
@@ -131,6 +181,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display), var(--font-sans), Arial, sans-serif;
+  letter-spacing: -0.011em;
   text-wrap: balance;
 }
 
@@ -156,9 +207,36 @@ h1, h2, h3, h4 {
   background-image: url("/textures/circuit-grid.svg");
   background-size: 260px 260px;
 }
+:root[data-theme="light"] .texture-grid::before {
+  background-image: url("/textures/circuit-grid-light.svg");
+}
 .texture-grid > * {
   position: relative;
   z-index: 1;
+}
+
+/* Ambient variant of the circuit grid for dense, content-heavy interior
+   shells (the dashboard/tool console frame). Unlike .texture-grid, this
+   uses z-index:-1 rather than z-index:0, so it never needs to force
+   `position: relative` onto every direct child — safe to wrap around
+   containers that hold sticky/fixed descendants (the Topbar, MobileNav). */
+.texture-grid-ambient {
+  position: relative;
+  isolation: isolate;
+}
+.texture-grid-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: url("/textures/circuit-grid.svg");
+  background-size: 260px 260px;
+}
+:root[data-theme="light"] .texture-grid-ambient::before {
+  background-image: url("/textures/circuit-grid-light.svg");
+  opacity: 0.28;
 }
 
 /* Texture: fine film grain for material depth on large dark surfaces. */

@@ -1,4 +1,5 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 import {
   KeyRound,
@@ -16,12 +17,15 @@ import { RiskDistributionChart } from "@/components/dashboard/RiskDistributionCh
 import { SystemExposureChart } from "@/components/dashboard/SystemExposureChart";
 import { IdentityTable } from "@/components/identities/IdentityTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { DuotoneImage } from "@/components/ui/DuotoneImage";
 import { identities } from "@/data/identities";
 import { assessIdentity } from "@/lib/riskEngine";
 import { daysSince } from "@/lib/utils";
 import { RiskSeverity, SystemName } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function DashboardPage() {
+  const { dict } = useLanguage();
   const assessed = identities.map((identity) => ({
     identity,
     assessment: assessIdentity(identity),
@@ -63,52 +67,47 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Topbar
-        title="Security Dashboard"
-        subtitle="Live risk posture across all connected non-human identities"
-      />
+      <Topbar title={dict.dashboard.title} subtitle={dict.dashboard.subtitle} />
       <main className="flex-1 space-y-6 p-6">
         <Card className="relative flex h-28 items-center overflow-hidden px-6">
-          <Image
-            src="/datacenter-network.jpg"
+          <DuotoneImage
+            src="/datacenter-network.webp"
             alt=""
             fill
             sizes="(max-width: 1024px) 100vw, 896px"
-            className="object-cover opacity-[0.14]"
+            className="absolute inset-0"
+            imgClassName="object-cover"
+            intensity="strong"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/70 to-transparent" />
-          <p className="relative max-w-lg text-sm text-ink-400">
-            Monitoring <span className="font-mono font-semibold text-ink-100">{total}</span>{" "}
-            non-human identities across 9 connected systems, from cloud access keys to CI/CD
-            secrets.
-          </p>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#08070c] via-[#08070c]/80 to-[#08070c]/20" />
+          <p className="relative max-w-lg text-sm text-slate-300">{dict.dashboard.banner(total)}</p>
         </Card>
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <KpiCard label="Total Identities" value={total} icon={KeyRound} tone="accent" />
-          <KpiCard label="Critical Risks" value={critical} icon={ShieldAlert} tone="critical" />
+          <KpiCard label={dict.dashboard.kpiTotal} value={total} icon={KeyRound} tone="accent" />
+          <KpiCard label={dict.dashboard.kpiCritical} value={critical} icon={ShieldAlert} tone="critical" />
           <KpiCard
-            label="No Expiration Set"
+            label={dict.dashboard.kpiNoExpiration}
             value={noExpiration}
             icon={CalendarClock}
             tone="high"
           />
-          <KpiCard label="Overprivileged" value={overprivileged} icon={Crown} tone="high" />
+          <KpiCard label={dict.dashboard.kpiOverprivileged} value={overprivileged} icon={Crown} tone="high" />
           <KpiCard
-            label="Secrets Without Rotation"
+            label={dict.dashboard.kpiNoRotation}
             value={rotationOverdue}
             icon={RotateCcw}
             tone="critical"
           />
-          <KpiCard label="Orphaned Identities" value={orphaned} icon={UserX} tone="ink" />
+          <KpiCard label={dict.dashboard.kpiOrphaned} value={orphaned} icon={UserX} tone="ink" />
           <KpiCard
-            label="Cloud/Service Exposure"
+            label={dict.dashboard.kpiCloudExposure}
             value={cloudExposure}
             icon={CloudCog}
             tone="medium"
           />
           <KpiCard
-            label="Healthy (Low Risk)"
+            label={dict.dashboard.kpiHealthy}
             value={severityCounts.Low}
             icon={ShieldAlert}
             tone="low"
@@ -118,7 +117,7 @@ export default function DashboardPage() {
         <div className="grid gap-4 lg:grid-cols-5">
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Risk Distribution</CardTitle>
+              <CardTitle>{dict.dashboard.riskDistribution}</CardTitle>
             </CardHeader>
             <CardContent>
               <RiskDistributionChart data={severityCounts} />
@@ -126,7 +125,7 @@ export default function DashboardPage() {
           </Card>
           <Card className="lg:col-span-3">
             <CardHeader>
-              <CardTitle>Identities by Connected System</CardTitle>
+              <CardTitle>{dict.dashboard.identitiesBySystem}</CardTitle>
             </CardHeader>
             <CardContent>
               <SystemExposureChart data={systemChartData} />
@@ -136,12 +135,12 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Highest-Risk Identities</CardTitle>
+            <CardTitle>{dict.dashboard.highestRisk}</CardTitle>
             <Link
               href="/identities"
-              className="flex items-center gap-1 text-xs font-medium text-accent-400 transition-colors hover:text-accent-300"
+              className="flex items-center gap-1 text-xs font-medium text-accent-ink transition-colors hover:opacity-80"
             >
-              View full inventory <ArrowRight className="h-3 w-3" />
+              {dict.dashboard.viewFullInventory} <ArrowRight className="h-3 w-3" />
             </Link>
           </CardHeader>
           <CardContent className="px-0 sm:px-0">

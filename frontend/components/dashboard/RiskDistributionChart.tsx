@@ -2,6 +2,7 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { RiskSeverity } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 const COLORS: Record<RiskSeverity, string> = {
   Critical: "#f1495c",
@@ -11,6 +12,7 @@ const COLORS: Record<RiskSeverity, string> = {
 };
 
 export function RiskDistributionChart({ data }: { data: Record<RiskSeverity, number> }) {
+  const { dict } = useLanguage();
   const chartData = (Object.keys(data) as RiskSeverity[]).map((severity) => ({
     name: severity,
     value: data[severity],
@@ -35,6 +37,7 @@ export function RiskDistributionChart({ data }: { data: Record<RiskSeverity, num
               ))}
             </Pie>
             <Tooltip
+              formatter={(value, name) => [value, dict.severity[name as RiskSeverity]] as [number, string]}
               contentStyle={{
                 background: "#121019",
                 border: "1px solid #262233",
@@ -52,7 +55,7 @@ export function RiskDistributionChart({ data }: { data: Record<RiskSeverity, num
               className="h-2.5 w-2.5 rounded-full"
               style={{ background: COLORS[entry.name as RiskSeverity] }}
             />
-            <span className="text-ink-400">{entry.name}</span>
+            <span className="text-ink-400">{dict.severity[entry.name]}</span>
             <span className="ml-auto font-mono font-medium text-ink-200 font-tabular">{entry.value}</span>
           </div>
         ))}

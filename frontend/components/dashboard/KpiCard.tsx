@@ -13,6 +13,15 @@ const toneClasses: Record<Tone, string> = {
   ink: "text-ink-300 bg-ink-500/10 border-ink-700/40",
 };
 
+const stripeClasses: Record<Tone, string> = {
+  accent: "bg-accent-500",
+  critical: "bg-critical-500",
+  high: "bg-high-500",
+  medium: "bg-medium-500",
+  low: "bg-low-500",
+  ink: "bg-ink-600",
+};
+
 interface KpiCardProps {
   label: string;
   value: string | number;
@@ -23,7 +32,8 @@ interface KpiCardProps {
 
 export function KpiCard({ label, value, icon: Icon, tone = "accent", hint }: KpiCardProps) {
   return (
-    <Card className="group p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink-600">
+    <Card className="group relative overflow-hidden p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink-600">
+      <span className={cn("absolute inset-x-0 top-0 h-0.5", stripeClasses[tone])} aria-hidden="true" />
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-ink-500">{label}</p>

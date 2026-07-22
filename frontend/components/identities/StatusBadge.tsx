@@ -1,5 +1,8 @@
+"use client";
+
 import { Badge, BadgeTone } from "@/components/ui/Badge";
 import { IdentityStatus, RotationStatus } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 const statusTone: Record<IdentityStatus, BadgeTone> = {
   Active: "low",
@@ -9,7 +12,8 @@ const statusTone: Record<IdentityStatus, BadgeTone> = {
 };
 
 export function StatusBadge({ status }: { status: IdentityStatus }) {
-  return <Badge tone={statusTone[status]}>{status}</Badge>;
+  const { dict } = useLanguage();
+  return <Badge tone={statusTone[status]}>{dict.status[status]}</Badge>;
 }
 
 const rotationTone: Record<RotationStatus, BadgeTone> = {
@@ -19,5 +23,6 @@ const rotationTone: Record<RotationStatus, BadgeTone> = {
 };
 
 export function RotationBadge({ status }: { status: RotationStatus }) {
-  return <Badge tone={rotationTone[status]}>{status}</Badge>;
+  const { dict } = useLanguage();
+  return <Badge tone={rotationTone[status]}>{dict.rotation[status]}</Badge>;
 }

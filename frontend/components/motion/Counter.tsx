@@ -9,10 +9,7 @@ export function Counter({ value, duration = 1.1 }: { value: number; duration?: n
   const started = useRef(false);
 
   useEffect(() => {
-    if (reduceMotion) {
-      setDisplay(value);
-      return;
-    }
+    if (reduceMotion) return;
     if (started.current) return;
     started.current = true;
 
@@ -24,5 +21,5 @@ export function Counter({ value, duration = 1.1 }: { value: number; duration?: n
     return () => controls.stop();
   }, [value, duration, reduceMotion]);
 
-  return <>{display}</>;
+  return <>{reduceMotion ? value : display}</>;
 }

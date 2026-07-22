@@ -1,10 +1,38 @@
 "use client";
 
-import createGlobe from "cobe";
-import { useEffect, useRef } from "react";
+import createGlobe, { COBEOptions } from "cobe";
+import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 
 const ACCENT: [number, number, number] = [0.36, 0.43, 0.96];
 const CRITICAL: [number, number, number] = [0.95, 0.29, 0.36];
+
+type GlobeTheme = Pick<
+  COBEOptions,
+  "dark" | "baseColor" | "markerColor" | "glowColor" | "mapBrightness" | "diffuse"
+>;
+
+// Dark mode keeps the original moody, low-contrast sphere; light mode needs
+// a much brighter base and glow or the globe reads as a solid black circle
+// against a light card background.
+const THEME_CONFIG: Record<"dark" | "light", GlobeTheme> = {
+  dark: {
+    dark: 1,
+    baseColor: [0.11, 0.1, 0.16],
+    markerColor: ACCENT,
+    glowColor: [0.32, 0.26, 0.55],
+    mapBrightness: 4.5,
+    diffuse: 1.1,
+  },
+  light: {
+    dark: 0,
+    baseColor: [0.85, 0.86, 0.95],
+    markerColor: ACCENT,
+    glowColor: [0.75, 0.77, 0.93],
+    mapBrightness: 6,
+    diffuse: 0.9,
+  },
+};
 
 // Approximate coordinates of major cloud/CI regions NHI Guardian
 // monitors identities across — grounds the globe in the actual
@@ -23,6 +51,12 @@ const MARKERS = [
 
 export function CoverageGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const theme = mounted && resolvedTheme === "light" ? "light" : "dark";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,14 +82,9 @@ export function CoverageGlobe() {
       height: width * 2,
       phi: 0,
       theta: 0.3,
-      dark: 1,
-      diffuse: 1.1,
       mapSamples: 14000,
-      mapBrightness: 4.5,
-      baseColor: [0.11, 0.1, 0.16],
-      markerColor: ACCENT,
-      glowColor: [0.32, 0.26, 0.55],
       markers: MARKERS,
+      ...THEME_CONFIG[theme],
     });
 
     const animate = () => {
@@ -70,7 +99,7 @@ export function CoverageGlobe() {
       globe?.destroy();
       resizeObserver.disconnect();
     };
-  }, []);
+  }, [theme]);
 
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[280px]">

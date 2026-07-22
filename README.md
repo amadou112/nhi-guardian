@@ -2,6 +2,8 @@
 
 **Live demo:** [frontend-sandy-nine-57.vercel.app](https://frontend-sandy-nine-57.vercel.app) · **Source:** [github.com/amadou112/nhi-guardian](https://github.com/amadou112/nhi-guardian)
 
+> The live demo is the frontend only, running entirely on local mock data and in-browser rule engines — it does not call the FastAPI backend described below. The backend is a separate, fully-built component of this project (see "Backend" under Running it locally) that isn't wired up in production yet; see the Roadmap.
+
 > NHI Guardian is an AI-powered Non-Human Identity Security Platform, powered by Sidibe Enterprises, that helps security and IAM teams identify risky service accounts, API keys, tokens, secrets, and machine credentials. It provides identity inventory, risk scoring, remediation guidance, and executive reporting.
 
 Non-human identities — API keys, service accounts, OAuth tokens, SSH keys, CI/CD secrets, and machine certificates — now outnumber human identities in most enterprises, and they rarely get the same governance. NHI Guardian is a portfolio-grade demonstration of how a security or IAM program would inventory, score, and remediate that risk end to end.
@@ -13,8 +15,9 @@ Non-human identities — API keys, service accounts, OAuth tokens, SSH keys, CI/
 - **AI Security Analyst** — a chat interface that answers questions like "Which identities are highest risk?", "Explain why this service account is critical," or "Generate a remediation plan," backed by the same risk engine (local mock mode by default; swappable for a live LLM).
 - **Remediation Recommendations** — every risky identity ships with concrete next steps: rotate, assign an owner, reduce permissions, disable, add an expiration, vault the secret, review production access, or document its purpose.
 - **Executive Report Generator** — a board-ready report with a risk summary, key metrics, top 5 critical findings, a phased remediation roadmap, and business impact.
-- **Phishing & Malware Scanner** — a standalone tool (`/tools/phishing-scanner`) that checks a pasted link, email, or message against rule-based threat indicators (lookalike/punycode domains, IP-based links, URL shorteners, urgency language, credential requests, dangerous attachment types) and explains exactly what it found.
-- **ATS Resume Checker** — a standalone tool (`/tools/resume-checker`) that scores a pasted resume against ATS-readiness rules (contact info, section headers, length, bullet density, action verbs, quantified achievements, target-keyword coverage) with concrete recommendations.
+- **Implementation Playbook** — an interactive, checklist-driven program plan (`/playbook`) for rolling out an NHI security program in a real organization end to end, with persisted progress and a RACI breakdown.
+- **Security Tools suite** — an `/tools` hub of 18 tools spanning the modern security stack: 9 are genuine paste-and-analyze rule engines running entirely client-side (Phishing & Malware Scanner, ATS Resume Checker, Cloud Security Posture Management, IAM & Zero-Trust Policy Analyzer, Vulnerability Assessment, Web App Security/SAST, Data Loss Prevention, Container & Kubernetes Security, Threat Intelligence Lookup), one is a real client-side AES-256-GCM **Data Encryption Tool** built on the Web Crypto API, and 8 are capability overview pages (SIEM, EDR, XDR, NDR, Pentest Frameworks, DFIR, SASE/SSE, Encryption & Key Management) explaining how each fits an identity-first security program.
+- **Bilingual, theme-aware UI** — full English/French translation and a light/dark theme toggle across every page, not just the marketing surface.
 
 ## Design system
 

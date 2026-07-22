@@ -9,22 +9,14 @@ import {
   Bot,
   FileText,
   ArrowLeftToLine,
-  Fish,
-  FileSearch,
+  LayoutGrid,
+  Map,
+  Globe2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const programNav = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/identities", label: "Identity Inventory", icon: KeyRound },
-  { href: "/ai-assistant", label: "AI Security Analyst", icon: Bot },
-  { href: "/reports", label: "Executive Reports", icon: FileText },
-];
-
-const toolsNav = [
-  { href: "/tools/phishing-scanner", label: "Phishing & Malware Scanner", icon: Fish },
-  { href: "/tools/resume-checker", label: "ATS Resume Checker", icon: FileSearch },
-];
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { TOOL_KEYS } from "@/lib/i18n/dictionary";
+import { TOOL_ROUTES, TOOL_ICONS } from "@/lib/toolsMeta";
 
 function NavLink({
   href,
@@ -41,10 +33,10 @@ function NavLink({
     <Link
       href={href}
       className={cn(
-        "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+        "group relative flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm font-medium transition-all duration-150",
         active
-          ? "bg-accent-500/10 text-accent-300"
-          : "text-ink-400 hover:text-ink-100 hover:bg-ink-900 hover:translate-x-0.5"
+          ? "border-accent-800/40 bg-accent-500/10 text-accent-ink"
+          : "border-transparent text-ink-400 hover:translate-x-0.5 hover:border-ink-800 hover:bg-ink-900 hover:text-ink-100"
       )}
     >
       <span
@@ -61,11 +53,34 @@ function NavLink({
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { dict } = useLanguage();
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+
+  const programNav = [
+    { href: "/dashboard", label: dict.nav.dashboard, icon: LayoutDashboard },
+    { href: "/identities", label: dict.nav.identities, icon: KeyRound },
+    { href: "/threat-map", label: dict.nav.threatMap, icon: Globe2 },
+    { href: "/ai-assistant", label: dict.nav.aiAnalyst, icon: Bot },
+    { href: "/reports", label: dict.nav.reports, icon: FileText },
+    { href: "/playbook", label: dict.nav.playbook, icon: Map },
+  ];
+
+  const toolsNav = [
+    { href: "/tools", label: dict.nav.toolsHub, icon: LayoutGrid },
+    ...TOOL_KEYS.map((key) => ({
+      href: TOOL_ROUTES[key],
+      label: dict.nav.toolLabels[key],
+      icon: TOOL_ICONS[key],
+    })),
+  ];
 
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-ink-800 bg-ink-950/60 min-h-screen">
-      <Link href="/" className="flex items-center gap-2.5 px-5 h-16 border-b border-ink-800 group">
+      <Link href="/" className="relative flex items-center gap-2.5 px-5 h-16 border-b border-ink-800 group">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent-500/60 to-transparent"
+        />
         <Image
           src="/brand/logo-mark.svg"
           alt="NHI Guardian"
@@ -82,7 +97,7 @@ export function Sidebar() {
       <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto">
         <div className="space-y-1">
           <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-600">
-            Security Program
+            {dict.nav.securityProgram}
           </p>
           {programNav.map((item) => (
             <NavLink key={item.href} {...item} active={isActive(item.href)} />
@@ -91,7 +106,7 @@ export function Sidebar() {
 
         <div className="space-y-1">
           <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-600">
-            Security Tools
+            {dict.nav.securityTools}
           </p>
           {toolsNav.map((item) => (
             <NavLink key={item.href} {...item} active={isActive(item.href)} />
@@ -105,7 +120,7 @@ export function Sidebar() {
           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-500 hover:text-ink-300 hover:bg-ink-900 transition-colors"
         >
           <ArrowLeftToLine className="h-4 w-4" />
-          Back to overview
+          {dict.nav.backToOverview}
         </Link>
       </div>
     </aside>
