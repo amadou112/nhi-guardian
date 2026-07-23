@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { TOOL_KEYS } from "@/lib/i18n/dictionary";
-import { TOOL_ROUTES, TOOL_ICONS } from "@/lib/toolsMeta";
+import { TOOL_ROUTES, TOOL_ICONS, AI_FEATURE_TOOL_KEYS } from "@/lib/toolsMeta";
 
 function NavLink({
   href,
@@ -74,6 +74,12 @@ export function Sidebar() {
     })),
   ];
 
+  const aiFeaturesNav = AI_FEATURE_TOOL_KEYS.map((key) => ({
+    href: TOOL_ROUTES[key],
+    label: dict.nav.toolLabels[key],
+    icon: TOOL_ICONS[key],
+  }));
+
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-ink-800 bg-ink-950/60 min-h-screen">
       <Link href="/" className="relative flex items-center gap-2.5 px-5 h-16 border-b border-ink-800 group">
@@ -109,6 +115,15 @@ export function Sidebar() {
             {dict.nav.securityTools}
           </p>
           {toolsNav.map((item) => (
+            <NavLink key={item.href} {...item} active={isActive(item.href)} />
+          ))}
+        </div>
+
+        <div className="space-y-1">
+          <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-600">
+            {dict.nav.aiFeatures}
+          </p>
+          {aiFeaturesNav.map((item) => (
             <NavLink key={item.href} {...item} active={isActive(item.href)} />
           ))}
         </div>

@@ -6,19 +6,27 @@ import { Topbar } from "@/components/layout/Topbar";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
-import { INTERACTIVE_TOOL_KEYS, CAPABILITY_TOOL_KEYS, TOOL_ROUTES, TOOL_ICONS } from "@/lib/toolsMeta";
+import {
+  INTERACTIVE_TOOL_KEYS,
+  CAPABILITY_TOOL_KEYS,
+  AI_FEATURE_TOOL_KEYS,
+  AI_INTERACTIVE_TOOL_KEYS,
+  TOOL_ROUTES,
+  TOOL_ICONS,
+} from "@/lib/toolsMeta";
 import { ToolKey } from "@/lib/i18n/dictionary";
 
 export default function ToolsHubPage() {
   const { dict } = useLanguage();
   const t = dict.tools.hub;
 
-  function ToolGrid({ keys, badge, tone }: { keys: ToolKey[]; badge: string; tone: "accent" | "ink" }) {
+  function ToolGrid({ keys, interactiveKeys }: { keys: ToolKey[]; interactiveKeys: ToolKey[] }) {
     return (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {keys.map((key) => {
           const Icon = TOOL_ICONS[key];
           const card = t.cards[key];
+          const isInteractive = interactiveKeys.includes(key);
           return (
             <Link key={key} href={TOOL_ROUTES[key]}>
               <Card className="group h-full p-6 transition-all duration-200 hover:-translate-y-1 hover:border-accent-600/50">
@@ -26,7 +34,9 @@ export default function ToolsHubPage() {
                   <div className="inline-flex rounded-lg border border-accent-800/40 bg-accent-500/10 p-2.5 text-accent-400">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <Badge tone={tone}>{badge}</Badge>
+                  <Badge tone={isInteractive ? "accent" : "ink"}>
+                    {isInteractive ? t.tryItBadge : t.overviewBadge}
+                  </Badge>
                 </div>
                 <h3 className="font-display mt-3 flex items-center gap-2 font-medium text-ink-100">
                   {card.title}
@@ -49,14 +59,21 @@ export default function ToolsHubPage() {
           <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-ink-600">
             {t.interactiveLabel}
           </p>
-          <ToolGrid keys={INTERACTIVE_TOOL_KEYS} badge={t.tryItBadge} tone="accent" />
+          <ToolGrid keys={INTERACTIVE_TOOL_KEYS} interactiveKeys={INTERACTIVE_TOOL_KEYS} />
         </div>
 
         <div>
           <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-ink-600">
             {t.capabilityLabel}
           </p>
-          <ToolGrid keys={CAPABILITY_TOOL_KEYS} badge={t.overviewBadge} tone="ink" />
+          <ToolGrid keys={CAPABILITY_TOOL_KEYS} interactiveKeys={[]} />
+        </div>
+
+        <div>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-ink-600">
+            {t.aiFeaturesLabel}
+          </p>
+          <ToolGrid keys={AI_FEATURE_TOOL_KEYS} interactiveKeys={AI_INTERACTIVE_TOOL_KEYS} />
         </div>
       </main>
     </>
